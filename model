@@ -1,0 +1,42 @@
+from scapy.all import sniff
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
+# 1️⃣ Capture Packets
+def capture_packets(count=100):
+    packets = sniff(count=count)
+    data = []
+    for pkt in packets:
+        length = len(pkt)
+        # Protocol (0 if not present)
+        proto = pkt.proto if hasattr(pkt, "proto") else 0
+        data.append([length, proto])
+    return data
+
+# 2️⃣ Generate Labels (for demo purposes, you can later use IDS to label attacks)
+def generate_labels(data):
+    # Here we just label packets with size > 1000 as '1' (maybe attack) else '0' (normal)
+    labels = [1 if pkt[0] > 1000 else 0 for pkt in data]
+    return labels
+
+# 3️⃣ Capture Data
+print("Capturing packets... this may take a few seconds")
+X = capture_packets(count=200)  # Capture 200 packets
+y = generate_labels(X)
+
+# 4️⃣ Convert to DataFrame
+df = pd.DataFrame(X, columns=["Length", "Protocol"])
+df["Label"] = y
+print("Sample data:\n", df.head())
+
+# 5️⃣ Train ML Model
+X_train, X_test, y_train, y_test = train_test_split(df[["Length", "Protocol"]], df["Label"], test_size=0.2, random_state=42)
+model = RandomForestClassifier(n_estimators=50, random_state=42)
+model.fit(X_train, y_train)
+
+# 6️⃣ Evaluate
+y_pred = model.predict(X_test)
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
