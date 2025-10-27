@@ -1,53 +1,54 @@
-NetSense: Comprehensive Network Monitoring & ML Toolkit
-NetSense is a robust Python toolkit developed for comprehensive network monitoring, device behavior simulation, and advanced packet classification using machine learning. This project integrates real-world network scanning with a safe, simulated testing environment and an ML model for security analysis, making it a valuable resource for network administrators, security researchers, and enthusiasts.
+Overview
 
-Features
-I. Real-World Network Scanning
-This module actively discovers and identifies devices connected to the local network by leveraging low-level networking protocols.
+NetSense is a comprehensive Python-based Network Monitoring and Security Toolkit that integrates real-time device scanning, network simulation, and machine learning-based packet analysis.
+It’s designed for cybersecurity researchers, IoT testers, and network administrators to study traffic patterns, detect anomalies, and simulate device behavior in a safe environment.
 
-Dynamic Network Scanner: Uses ARP requests via Scapy to efficiently detect all active hosts on the local subnet. It automatically determines the local IP address and the correct subnet range to scan.
+⚙️ Core Features
+1️⃣ Dynamic ARP Network Scanner
 
-Advanced Device Identification: Captures the IP Address, MAC Address, and performs Reverse DNS Lookup using the socket library to retrieve the device's Hostname (e.g., "My-Laptop-PC").
+Uses Scapy to perform real-time device discovery within the local subnet.
 
-Vendor Lookup: Translates the first part of the MAC address to identify the device Manufacturer/Vendor (e.g., Apple, Cisco, HP) using the OUI database provided by the mac-vendor-lookup library.
+Displays IP, MAC, Vendor, and Hostname using the OUI database and reverse DNS lookup.
 
-II. Network Simulation and Testing
-This module provides a controlled environment for testing monitoring scripts and alert systems without affecting a live network.
+Auto-detects local IP and subnet range dynamically.
 
-Mock Network Simulation: Simulates a dynamic network environment using a predefined pool of devices. The simulation generates random events such as:
+2️⃣ Mock Network Simulator
 
-Connections: New devices joining the network.
+Simulates real-world device behavior with random connections, disconnections, and failed Wi-Fi attempts.
 
-Disconnections: A 30% chance of a connected device randomly dropping off.
+Logs every network event with timestamps for behavioral analysis.
 
-Failed Attempts: A 20% chance that a device attempting to connect fails due to a simulated "wrong Wi-Fi password."
+Ideal for testing alert and monitoring systems safely.
 
-Real-time Event Logging: Prints simulated network events to the console, clearly marking successful connections, disconnections, and authentication failures.
+3️⃣ Machine Learning-Based Packet Classifier
 
-III. Machine Learning-Based Packet Analysis
-This module introduces a foundational machine learning approach to network security monitoring.
+Captures live network packets using Scapy’s sniff() function.
 
-Packet Capture and Feature Extraction: Captures live network packets using Scapy and extracts relevant features, such as packet Length and Protocol.
+Extracts packet features (Length, Protocol) and labels them for anomaly detection.
 
-Suspicious Packet Detection: Labels packets as normal (0) or potentially suspicious (1) based on simple, predefined heuristics.
+Trains a Random Forest classifier to distinguish between normal and suspicious packets.
 
-Random Forest Classifier: Trains a Random Forest Classifier from the scikit-learn library to learn patterns associated with normal versus suspicious traffic.
+Outputs a classification report (precision, recall, F1-score).
 
-Performance Metrics: Outputs a comprehensive classification report to evaluate the model, including Precision, Recall, F1-score, and Accuracy.
+🧩 Tech Stack
 
-Requirements and Setup
-To run this toolkit, you need the following Python libraries. A requirements.txt file is included in the project for easy installation:
+Languages: Python 3.10+
 
-Bash
+Libraries: scapy, socket, mac-vendor-lookup, pandas, scikit-learn
 
-pip install -r requirements.txt
-Key Libraries:
-scapy: For network scanning (ARP) and raw packet capture.
+Concepts: Network Scanning, DNS Lookup, OUI Vendor Mapping, ML Classification
 
-mac-vendor-lookup: For device manufacturer identification.
+🚀 How to Run
+# 1️⃣ Install dependencies
+pip install scapy mac-vendor-lookup pandas scikit-learn
 
-scikit-learn: For the machine learning classification module.
+# 2️⃣ Run as Administrator or root for network access
+sudo python netsense.py
 
-numpy: For data processing within the ML module.
+📊 Key Outputs
 
-Note on Permissions: The real-world scanning and packet capture features require elevated privileges (root/administrator) to interact with the raw network interfaces. Please run the corresponding scripts with sudo on Linux/macOS or as an Administrator on Windows.
+Real-time device table (IP, MAC, Vendor, Hostname)
+
+Mock connection/disconnection events
+
+ML classification metrics for network anomaly detection
