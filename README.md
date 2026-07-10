@@ -77,31 +77,105 @@ Built for **cybersecurity researchers, IoT testers, and network administrators**
 
 ---
 
-## 🚀 Quick Start
+## 🚀 How to Run
 
-### 1. Install dependencies
+### ✅ Prerequisites
+
+| Requirement | Version | Check |
+|------------|---------|-------|
+| Python | 3.10+ | `python --version` |
+| pip | latest | `pip --version` |
+| Administrator / root access | required | for raw socket operations |
+| Internet connection | optional | for OUI vendor database update |
+
+---
+
+### 📦 Step 1 — Install Dependencies
 
 ```bash
 pip install scapy mac-vendor-lookup pandas scikit-learn
 ```
 
-### 2. Run as Administrator / root (required for raw socket access)
+> 💡 Use a virtual environment to keep dependencies isolated:
+> ```bash
+> python -m venv venv
+> source venv/bin/activate      # Linux / macOS
+> venv\Scripts\activate         # Windows
+> pip install scapy mac-vendor-lookup pandas scikit-learn
+> ```
+
+---
+
+### 🖥️ Step 2 — Clone the Repository
 
 ```bash
-# Scan your network for all connected devices
+git clone https://github.com/soham-2020/ARP-Network-Scanne.git
+cd ARP-Network-Scanne
+```
+
+---
+
+### ▶️ Step 3 — Run the Tool
+
+#### 🐧 Linux / macOS
+```bash
+# ARP Network Scanner (discovers all devices on your subnet)
 sudo python netsense.py scan
 
-# Run the mock network simulator
+# Mock Network Simulator (safe testing — no real packets)
 sudo python netsense.py simulate
 
-# Capture packets and train the ML anomaly detector
+# ML Packet Classifier (captures live traffic + trains model)
 sudo python netsense.py ml
 
-# Run all three modules sequentially
+# Run all three modules one after another
 sudo python netsense.py all
 ```
 
-> **Windows users:** Open PowerShell as Administrator before running.
+#### 🪟 Windows (Run PowerShell as Administrator)
+```powershell
+# ARP Network Scanner
+python netsense.py scan
+
+# Mock Network Simulator
+python netsense.py simulate
+
+# ML Packet Classifier
+python netsense.py ml
+
+# Run all three
+python netsense.py all
+```
+
+> ⚠️ **Why Administrator?**
+> ARP scanning uses raw sockets (Layer 2) which require elevated privileges on all operating systems.
+
+---
+
+### 🔧 Run Individual Modules Directly
+
+```bash
+# Run only the scanner
+sudo python network_scanner.py
+
+# Run only the simulator
+python mock_simulator.py
+
+# Run only the ML classifier
+sudo python ml_classifier.py
+```
+
+---
+
+### 🐛 Common Issues & Fixes
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `Operation not permitted` | Not running as root/admin | Use `sudo` on Linux/macOS or run as Administrator on Windows |
+| `ModuleNotFoundError: scapy` | Dependencies not installed | Run `pip install scapy` |
+| `No active devices found` | ARP timeout too short | Increase `timeout` in `scan_network()` |
+| `OUI update failed` | No internet | Vendor names show as `UNKNOWN` — harmless |
+| `Live capture failed` | Firewall blocking | ML classifier falls back to synthetic dataset automatically |
 
 ---
 
